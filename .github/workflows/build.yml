@@ -38,6 +38,9 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/main' && github.ref != 'refs/heads/master' }}
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Build
         run: ./gradlew :${{ matrix.platform }}:build -PversionProfile=${{ matrix.profile }} --stacktrace
 

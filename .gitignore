@@ -1,0 +1,27 @@
+# Gradle
+.gradle/
+build/
+out/
+bin/
+!gradle-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.eclipse/
+.classpath
+.project
+.settings/
+
+# Loom / NeoForge
+run/
+runs/
+.fabric/
+fabric-runtime-info.json
+
+# OS
+.DS_Store
+Thumbs.db

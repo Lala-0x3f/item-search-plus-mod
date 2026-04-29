@@ -1,0 +1,37 @@
+// Root build script: shared configuration applied to every subproject.
+allprojects {
+    group = project.findProperty('mod_group') ?: 'dev.itemsearchplus'
+    version = project.findProperty('mod_version') ?: '1.0.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(21)
+        }
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = 21
+    }
+
+    repositories {
+        mavenCentral()
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.neoforged.net/releases' }
+        maven { url = 'https://maven.parchmentmc.org' }
+        maven { url = 'https://libraries.minecraft.net/' }
+    }
+
+    // Allow each platform module to also compile shared sources placed under <root>/common.
+    sourceSets.configureEach { ss ->
+        if (ss.name == 'main') {
+            ss.java.srcDirs += rootProject.file('common/src/main/java')
+            ss.resources.srcDirs += rootProject.file('common/src/main/resources')
+        }
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.itemsearchplus.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [
+    "SessionSearchTreesMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

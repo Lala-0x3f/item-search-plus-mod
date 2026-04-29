@@ -1,0 +1,60 @@
+plugins {
+    id 'fabric-loom' version '1.7-SNAPSHOT'
+}
+
+archivesBaseName = "${rootProject.findProperty('mod_id')}-fabric-${project.minecraft_version}"
+
+loom {
+    runs {
+        client {
+            client()
+            ideConfigGenerated true
+            runDir 'run'
+        }
+    }
+    mixin {
+        defaultRefmapName = 'itemsearchplus.refmap.json'
+    }
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${project.parchment_minecraft}:${project.parchment_mappings}@zip")
+    }
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mod_id', project.mod_id
+    inputs.property 'mod_name', project.mod_name
+    inputs.property 'mod_description', project.mod_description
+
+    filesMatching('fabric.mod.json') {
+        expand(
+            version: project.version,
+            mod_id: project.mod_id,
+            mod_name: project.mod_name,
+            mod_description: project.mod_description,
+            minecraft_version: project.minecraft_version,
+            fabric_loader_version: project.fabric_loader_version
+        )
+    }
+}
+
+jar {
+    from(rootProject.file('LICENSE')) { rename { "${it}_${project.mod_id}" } }
+    manifest {
+        attributes([
+            'Specification-Title'    : project.mod_name,
+            'Specification-Vendor'   : project.mod_author,
+            'Specification-Version'  : project.version,
+            'Implementation-Title'   : project.mod_name,
+            'Implementation-Version' : project.version,
+            'Implementation-Vendor'  : project.mod_author
+        ])
+    }
+}

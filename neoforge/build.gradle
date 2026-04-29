@@ -1,0 +1,62 @@
+plugins {
+    id 'net.neoforged.moddev' version '1.0.21'
+}
+
+archivesBaseName = "${rootProject.findProperty('mod_id')}-neoforge-${project.minecraft_version}"
+
+neoForge {
+    version = project.neoforge_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings
+        minecraftVersion = project.parchment_minecraft
+    }
+
+    runs {
+        client {
+            client()
+        }
+    }
+
+    mods {
+        "${project.mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    // ModDevGradle wires the NeoForge userdev jar internally; nothing else required.
+}
+
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mod_id', project.mod_id
+    inputs.property 'mod_name', project.mod_name
+    inputs.property 'mod_description', project.mod_description
+
+    filesMatching('META-INF/neoforge.mods.toml') {
+        expand(
+            version: project.version,
+            mod_id: project.mod_id,
+            mod_name: project.mod_name,
+            mod_description: project.mod_description,
+            mod_author: project.mod_author,
+            minecraft_version: project.minecraft_version,
+            neoforge_version: project.neoforge_version
+        )
+    }
+}
+
+jar {
+    manifest {
+        attributes([
+            'Specification-Title'    : project.mod_name,
+            'Specification-Vendor'   : project.mod_author,
+            'Specification-Version'  : project.version,
+            'Implementation-Title'   : project.mod_name,
+            'Implementation-Version' : project.version,
+            'Implementation-Vendor'  : project.mod_author
+        ])
+    }
+}

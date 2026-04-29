@@ -1,0 +1,37 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.neoforged.net/releases' }
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://maven.parchmentmc.org' }
+    }
+}
+
+plugins {
+    // Toolchain auto-provisioning so JDK 21 is available without manual install.
+    id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+rootProject.name = 'item-search-plus'
+include 'fabric'
+include 'neoforge'
+
+// Optional version-profile loader: pass -PversionProfile=1.21.4 (etc.) to override
+// versions from versions/<profile>.properties on top of gradle.properties.
+def profile = settings.startParameter.projectProperties.get('versionProfile')
+if (profile == null) {
+    profile = System.getenv('VERSION_PROFILE')
+}
+if (profile != null && !profile.isEmpty()) {
+    def file = new File(rootDir, "versions/${profile}.properties")
+    if (!file.exists()) {
+        throw new GradleException("Unknown versionProfile '${profile}': ${file} not found")
+    }
+    def props = new Properties()
+    file.withInputStream { props.load(it) }
+    props.each { k, v ->
+        settings.startParameter.projectProperties.put(k.toString(), v.toString())
+    }
+    println "[item-search-plus] Loaded version profile: ${profile} -> mc=${props['minecraft_version']}"
+}

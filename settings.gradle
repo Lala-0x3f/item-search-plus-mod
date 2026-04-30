@@ -31,7 +31,7 @@ if (profile != null && !profile.isEmpty()) {
     def props = new Properties()
     file.withInputStream { props.load(it) }
     props.each { k, v ->
-        settings.startParameter.projectProperties.put(k.toString(), v.toString())
+        gradle.ext.set(k.toString(), v.toString())
     }
     println "[item-search-plus] Loaded version profile: ${profile} -> mc=${props['minecraft_version']}"
 }

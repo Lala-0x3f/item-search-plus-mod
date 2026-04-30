@@ -42,7 +42,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build
-        run: ./gradlew :${{ matrix.platform }}:build -PversionProfile=${{ matrix.profile }} --stacktrace
+        run: ./gradlew :${{ matrix.platform }}:build -PversionProfile="${{ matrix.profile }}" --stacktrace
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
